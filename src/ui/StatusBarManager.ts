@@ -228,7 +228,7 @@ export class StatusBarManager {
         tooltip.appendMarkdown(`---\n\n`);
 
         // Proxy target toggles
-        this.appendTargetToggles(tooltip, i18n);
+        this.appendTargetToggles(tooltip, i18n, state);
 
         tooltip.appendMarkdown(`---\n\n`);
 
@@ -239,9 +239,11 @@ export class StatusBarManager {
     }
 
     /**
-     * Append proxy target toggle switches to tooltip
+     * Append proxy target toggle switches to tooltip.
+     * When proxy is Off, targets are shown as dimmed non-clickable text.
      */
-    private appendTargetToggles(tooltip: vscode.MarkdownString, i18n: I18nManager): void {
+    private appendTargetToggles(tooltip: vscode.MarkdownString, i18n: I18nManager, state: ProxyState): void {
+        const isOff = state.mode === ProxyMode.Off;
         const section = vscode.workspace.getConfiguration('otakProxy.targets');
         const targets = [
             { key: 'vscode', label: i18n.t('statusbar.target.vscode'), enabled: section.get<boolean>('vscode', true) },
@@ -253,7 +255,11 @@ export class StatusBarManager {
         tooltip.appendMarkdown(`**${i18n.t('statusbar.tooltip.proxyTargets')}**\n\n`);
         for (const t of targets) {
             const icon = t.enabled ? '$(check)' : '$(circle-large-outline)';
-            tooltip.appendMarkdown(`${icon} [${t.label}](command:otak-proxy.toggleTarget.${t.key}) &nbsp; `);
+            if (isOff) {
+                tooltip.appendMarkdown(`${icon} ${t.label} &nbsp; `);
+            } else {
+                tooltip.appendMarkdown(`${icon} [${t.label}](command:otak-proxy.toggleTarget.${t.key}) &nbsp; `);
+            }
         }
         tooltip.appendMarkdown(`\n\n`);
     }

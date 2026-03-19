@@ -188,10 +188,21 @@ export class CommandRegistry {
                 `otak-proxy.toggleTarget.${key}`,
                 async () => {
                     try {
+                        const state = await this.commandContext.getProxyState();
+                        if (state.mode === ProxyMode.Off) {
+                            return;
+                        }
+
                         const section = vscode.workspace.getConfiguration('otakProxy.targets');
                         const current = section.get<boolean>(key, true);
                         await section.update(key, !current, vscode.ConfigurationTarget.Global);
-                        const state = await this.commandContext.getProxyState();
+
+                        // Re-apply proxy: enabled targets get set, disabled targets get unset
+                        const activeUrl = this.commandContext.getActiveProxyUrl(state);
+                        if (activeUrl) {
+                            await this.commandContext.applyProxySettings(activeUrl, true);
+                        }
+
                         this.commandContext.updateStatusBar(state);
                     } catch (error) {
                         Logger.error(`Failed to toggle target ${key}:`, error);

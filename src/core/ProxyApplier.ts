@@ -91,6 +91,8 @@ export class ProxyApplier {
                 proxyUrl,
                 errorAggregator
             );
+        } else {
+            await this.trySilentUnset(this.vscodeManager, 'VSCode configuration');
         }
 
         // Try Git configuration
@@ -102,6 +104,8 @@ export class ProxyApplier {
                 proxyUrl,
                 errorAggregator
             );
+        } else {
+            await this.trySilentUnset(this.gitManager, 'Git configuration');
         }
 
         // Try npm configuration
@@ -113,6 +117,8 @@ export class ProxyApplier {
                 proxyUrl,
                 errorAggregator
             );
+        } else {
+            await this.trySilentUnset(this.npmManager, 'npm configuration');
         }
 
         // Try VSCode integrated terminal environment variables (best-effort)
@@ -124,6 +130,8 @@ export class ProxyApplier {
                 proxyUrl,
                 errorAggregator
             );
+        } else if (!targets.terminal && this.terminalEnvManager) {
+            await this.trySilentUnset(this.terminalEnvManager, 'Terminal environment');
         }
 
         // Track configuration state if stateManager is provided
@@ -275,6 +283,24 @@ export class ProxyApplier {
         }
 
         return success;
+    }
+
+    /**
+     * Silently unset proxy for a disabled target. Failures are logged but not
+     * surfaced to the user, since the target was explicitly disabled.
+     * 
+     * @param manager - The ConfigManager to unset
+     * @param name - The name of the manager for logging
+     */
+    private async trySilentUnset(
+        manager: GitConfigManager | VscodeConfigManager | NpmConfigManager | TerminalEnvConfigManager,
+        name: string
+    ): Promise<void> {
+        try {
+            await manager.unsetProxy();
+        } catch (error) {
+            Logger.error(`Silent unset failed for ${name}:`, error);
+        }
     }
 
     /**

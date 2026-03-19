@@ -2,6 +2,10 @@
   "command.toggleProxy": "otak: Toggle Proxy",
   "command.testProxy": "otak: Test Proxy",
   "command.importProxy": "otak: Import System Proxy",
+  "command.toggleTarget.vscode": "otak: Toggle VSCode Proxy Target",
+  "command.toggleTarget.git": "otak: Toggle Git Proxy Target",
+  "command.toggleTarget.npm": "otak: Toggle npm Proxy Target",
+  "command.toggleTarget.terminal": "otak: Toggle Terminal Proxy Target",
 
   "config.proxyUrl": "Proxy server URL (e.g., http://proxy.example.com:8080) for VSCode, Git, npm, and integrated terminal proxy settings",
   "config.pollingInterval": "Auto mode polling interval in seconds (10-300). How often to check for system proxy changes.",
@@ -11,6 +15,10 @@
   "config.autoTestEnabled": "Enable automatic proxy connection testing in Auto mode. When enabled, proxy connectivity is tested periodically.",
   "config.enableFallback": "Enable fallback to manual proxy when system proxy is not detected (Auto mode only). When enabled, if no system proxy is detected, the extension will try to use the manually configured proxy as a fallback.",
   "config.enableFallback.description": "When enabled, if no system proxy is detected in Auto mode, the extension will try to use the manually configured proxy as a fallback.",
+  "config.targets.vscode": "Apply proxy to VSCode settings (http.proxy). Affects VSCode's own network requests and built-in extensions.",
+  "config.targets.git": "Apply proxy to Git global configuration (http.proxy / https.proxy in ~/.gitconfig). Affects all git operations system-wide.",
+  "config.targets.npm": "Apply proxy to npm configuration (proxy / https-proxy in ~/.npmrc). Affects all npm operations system-wide.",
+  "config.targets.terminal": "Inject proxy environment variables (HTTP_PROXY, HTTPS_PROXY, etc.) into newly created integrated terminals.",
   "config.syncEnabled": "Enable synchronization between multiple VSCode/Cursor instances. When enabled, proxy settings are shared across all instances.",
   "config.syncInterval": "Synchronization check interval in milliseconds (100-5000). How often to check for changes from other instances.",
 
@@ -125,6 +133,12 @@
   "statusbar.link.configureManual": "Configure Manual",
   "statusbar.link.importSystem": "Import System",
   "statusbar.link.testProxy": "Test Proxy",
+
+  "statusbar.tooltip.proxyTargets": "Proxy Targets",
+  "statusbar.target.vscode": "VSCode",
+  "statusbar.target.git": "Git",
+  "statusbar.target.npm": "npm",
+  "statusbar.target.terminal": "Terminal",
 
   "progress.testingProxy": "Testing proxy {current} of {total}...",
   "progress.testingProxyUrl": "Testing proxy {current} of {total}: {url}",

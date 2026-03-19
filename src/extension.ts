@@ -260,15 +260,16 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     if (state.mode === ProxyMode.Off) {
         // If proxy is OFF, ensure any lingering proxy settings are cleared.
         // We only disable when something is actually configured to avoid unnecessary noise.
-        if (terminalEnvManager) {
+        const targetSection = vscode.workspace.getConfiguration('otakProxy.targets');
+        if (terminalEnvManager && targetSection.get<boolean>('terminal', true)) {
             await terminalEnvManager.unsetProxy();
         }
-        const [gitProxy, vscodeProxy, npmProxy] = await Promise.all([
-            gitConfigManager.getProxy().catch(() => null),
-            vscodeConfigManager.getProxy().catch(() => null),
-            npmConfigManager.getProxy().catch(() => null)
+        const checks = await Promise.all([
+            targetSection.get<boolean>('git', true) ? gitConfigManager.getProxy().catch(() => null) : null,
+            targetSection.get<boolean>('vscode', true) ? vscodeConfigManager.getProxy().catch(() => null) : null,
+            targetSection.get<boolean>('npm', true) ? npmConfigManager.getProxy().catch(() => null) : null
         ]);
-        if (gitProxy || vscodeProxy || npmProxy) {
+        if (checks.some(v => v)) {
             await proxyApplier.disableProxy();
         }
     } else if (activeUrl) {

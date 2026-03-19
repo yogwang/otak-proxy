@@ -2,6 +2,10 @@
   "command.toggleProxy": "otak: Proxyを切り替え",
   "command.testProxy": "otak: Proxyをテスト",
   "command.importProxy": "otak: システムProxyをインポート",
+  "command.toggleTarget.vscode": "otak: VSCode Proxyターゲットを切り替え",
+  "command.toggleTarget.git": "otak: Git Proxyターゲットを切り替え",
+  "command.toggleTarget.npm": "otak: npm Proxyターゲットを切り替え",
+  "command.toggleTarget.terminal": "otak: ターミナル Proxyターゲットを切り替え",
 
   "config.proxyUrl": "VSCode・Git・npm・統合ターミナルのproxy設定用のProxyサーバーURL（例: http://proxy.example.com:8080）",
   "config.pollingInterval": "Autoモードのポーリング間隔（秒単位、10-300）。システムproxyの変更をチェックする頻度。",
@@ -11,6 +15,10 @@
   "config.autoTestEnabled": "Autoモードで自動Proxy接続テストを有効にする。有効な場合、定期的にProxyの疎通性をテストします。",
   "config.enableFallback": "システムProxyが検出されない場合に手動Proxyへフォールバックする（Autoモード専用）。有効な場合、システムProxyが検出されないと手動設定されたProxyをフォールバックとして使用します。",
   "config.enableFallback.description": "有効にすると、AutoモードでシステムProxyが検出されない場合、手動で設定されたProxyをフォールバックとして使用します。",
+  "config.targets.vscode": "VSCode設定にProxyを適用する（http.proxy）。VSCode自体のネットワークリクエストと内蔵拡張機能に影響します。",
+  "config.targets.git": "Gitグローバル設定にProxyを適用する（~/.gitconfigのhttp.proxy / https.proxy）。システム全体のすべてのgit操作に影響します。",
+  "config.targets.npm": "npm設定にProxyを適用する（~/.npmrcのproxy / https-proxy）。システム全体のすべてのnpm操作に影響します。",
+  "config.targets.terminal": "新しく作成された統合ターミナルにProxy環境変数（HTTP_PROXY、HTTPS_PROXYなど）を注入する。",
   "config.syncEnabled": "複数のVSCode/Cursorインスタンス間で同期を有効にする。有効な場合、Proxy設定がすべてのインスタンス間で共有されます。",
   "config.syncInterval": "同期チェック間隔（ミリ秒、100-5000）。他のインスタンスからの変更をチェックする頻度。",
 
@@ -125,6 +133,12 @@
   "statusbar.link.configureManual": "手動設定",
   "statusbar.link.importSystem": "システムからインポート",
   "statusbar.link.testProxy": "Proxyをテスト",
+
+  "statusbar.tooltip.proxyTargets": "Proxy対象",
+  "statusbar.target.vscode": "VSCode",
+  "statusbar.target.git": "Git",
+  "statusbar.target.npm": "npm",
+  "statusbar.target.terminal": "ターミナル",
 
   "progress.testingProxy": "Proxyをテスト中 {current}/{total}...",
   "progress.testingProxyUrl": "Proxyをテスト中 {current}/{total}: {url}",

@@ -76,7 +76,11 @@ export class StatusBarManager {
         'otak-proxy.toggleProxy',
         'otak-proxy.configureUrl',
         'otak-proxy.testProxy',
-        'otak-proxy.importProxy'
+        'otak-proxy.importProxy',
+        'otak-proxy.toggleTarget.vscode',
+        'otak-proxy.toggleTarget.git',
+        'otak-proxy.toggleTarget.npm',
+        'otak-proxy.toggleTarget.terminal'
     ];
 
     constructor(context: vscode.ExtensionContext) {
@@ -215,10 +219,35 @@ export class StatusBarManager {
 
         tooltip.appendMarkdown(`---\n\n`);
 
+        // Proxy target toggles
+        this.appendTargetToggles(tooltip, i18n);
+
+        tooltip.appendMarkdown(`---\n\n`);
+
         // Command links
         this.appendCommandLinks(tooltip, i18n);
 
         return tooltip;
+    }
+
+    /**
+     * Append proxy target toggle switches to tooltip
+     */
+    private appendTargetToggles(tooltip: vscode.MarkdownString, i18n: I18nManager): void {
+        const section = vscode.workspace.getConfiguration('otakProxy.targets');
+        const targets = [
+            { key: 'vscode', label: i18n.t('statusbar.target.vscode'), enabled: section.get<boolean>('vscode', true) },
+            { key: 'git', label: i18n.t('statusbar.target.git'), enabled: section.get<boolean>('git', true) },
+            { key: 'npm', label: i18n.t('statusbar.target.npm'), enabled: section.get<boolean>('npm', true) },
+            { key: 'terminal', label: i18n.t('statusbar.target.terminal'), enabled: section.get<boolean>('terminal', true) },
+        ];
+
+        tooltip.appendMarkdown(`**${i18n.t('statusbar.tooltip.proxyTargets')}**\n\n`);
+        for (const t of targets) {
+            const icon = t.enabled ? '$(check)' : '$(circle-large-outline)';
+            tooltip.appendMarkdown(`${icon} [${t.label}](command:otak-proxy.toggleTarget.${t.key}) &nbsp; `);
+        }
+        tooltip.appendMarkdown(`\n\n`);
     }
 
     /**

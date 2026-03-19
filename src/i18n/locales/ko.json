@@ -1,7 +1,7 @@
 {
-  "command.toggleProxy": "프록시 전환",
-  "command.testProxy": "프록시 테스트",
-  "command.importProxy": "시스템 프록시 가져오기",
+  "command.toggleProxy": "otak: 프록시 전환",
+  "command.testProxy": "otak: 프록시 테스트",
+  "command.importProxy": "otak: 시스템 프록시 가져오기",
 
   "config.proxyUrl": "VS Code, Git, npm 및 통합 터미널 프록시 설정에 사용할 프록시 서버 URL(예: http://proxy.example.com:8080)",
   "config.pollingInterval": "자동 모드 폴링 간격(초, 10-300). 시스템 프록시 변경을 확인하는 빈도입니다.",

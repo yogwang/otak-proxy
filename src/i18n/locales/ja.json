@@ -1,7 +1,7 @@
 {
-  "command.toggleProxy": "Proxyを切り替え",
-  "command.testProxy": "Proxyをテスト",
-  "command.importProxy": "システムProxyをインポート",
+  "command.toggleProxy": "otak: Proxyを切り替え",
+  "command.testProxy": "otak: Proxyをテスト",
+  "command.importProxy": "otak: システムProxyをインポート",
 
   "config.proxyUrl": "VSCode・Git・npm・統合ターミナルのproxy設定用のProxyサーバーURL（例: http://proxy.example.com:8080）",
   "config.pollingInterval": "Autoモードのポーリング間隔（秒単位、10-300）。システムproxyの変更をチェックする頻度。",

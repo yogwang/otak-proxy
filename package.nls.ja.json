@@ -1,7 +1,7 @@
 {
-  "command.importProxy": "システムProxyをインポート",
-  "command.testProxy": "Proxyをテスト",
-  "command.toggleProxy": "Proxyを切り替え",
+  "command.importProxy": "otak: システムProxyをインポート",
+  "command.testProxy": "otak: Proxyをテスト",
+  "command.toggleProxy": "otak: Proxyを切り替え",
   "config.autoTestEnabled": "Autoモードで自動Proxy接続テストを有効にする。有効な場合、定期的にProxyの疎通性をテストします。",
   "config.detectionSourcePriority": "Proxy検出ソースの優先順位。指定された順序で試行され、最初に成功したものが使用されます。",
   "config.enableFallback": "システムProxyが検出されない場合に手動Proxyへフォールバックする（Autoモード専用）。有効な場合、システムProxyが検出されないと手動設定されたProxyをフォールバックとして使用します。",

@@ -1,7 +1,7 @@
 {
-  "command.toggleProxy": "Bật/tắt Proxy",
-  "command.testProxy": "Kiểm tra Proxy",
-  "command.importProxy": "Nhập Proxy hệ thống",
+  "command.toggleProxy": "otak: Bật/tắt Proxy",
+  "command.testProxy": "otak: Kiểm tra Proxy",
+  "command.importProxy": "otak: Nhập Proxy hệ thống",
 
   "config.proxyUrl": "URL máy chủ proxy (ví dụ: http://proxy.example.com:8080) dùng cho cài đặt proxy của VS Code, Git, npm và terminal tích hợp",
   "config.pollingInterval": "Khoảng thời gian thăm dò ở chế độ Tự động (giây, 10-300). Tần suất kiểm tra thay đổi proxy hệ thống.",

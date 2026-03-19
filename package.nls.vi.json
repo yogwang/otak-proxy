@@ -1,7 +1,7 @@
 {
-  "command.importProxy": "Nhập Proxy hệ thống",
-  "command.testProxy": "Kiểm tra Proxy",
-  "command.toggleProxy": "Bật/tắt Proxy",
+  "command.importProxy": "otak: Nhập Proxy hệ thống",
+  "command.testProxy": "otak: Kiểm tra Proxy",
+  "command.toggleProxy": "otak: Bật/tắt Proxy",
   "config.autoTestEnabled": "Bật kiểm tra kết nối proxy tự động trong chế độ Tự động. Khi bật, kết nối proxy sẽ được kiểm tra định kỳ.",
   "config.detectionSourcePriority": "Thứ tự ưu tiên nguồn phát hiện proxy. Các nguồn sẽ được thử theo thứ tự cho đến khi một nguồn thành công.",
   "config.enableFallback": "Bật dự phòng sang proxy thủ công khi không phát hiện được proxy hệ thống (chỉ chế độ Tự động). Khi bật, nếu không phát hiện proxy hệ thống, tiện ích sẽ thử dùng proxy thủ công đã cấu hình làm dự phòng.",

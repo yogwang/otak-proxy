@@ -1,7 +1,7 @@
 {
-  "command.importProxy": "Import System Proxy",
-  "command.testProxy": "Test Proxy",
-  "command.toggleProxy": "Toggle Proxy",
+  "command.importProxy": "otak: Import System Proxy",
+  "command.testProxy": "otak: Test Proxy",
+  "command.toggleProxy": "otak: Toggle Proxy",
   "config.autoTestEnabled": "Enable automatic proxy connection testing in Auto mode. When enabled, proxy connectivity is tested periodically.",
   "config.detectionSourcePriority": "Priority order for proxy detection sources. Sources are tried in order until one succeeds.",
   "config.enableFallback": "Enable fallback to manual proxy when system proxy is not detected (Auto mode only). When enabled, if no system proxy is detected, the extension will try to use the manually configured proxy as a fallback.",

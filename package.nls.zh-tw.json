@@ -1,7 +1,7 @@
 {
-  "command.importProxy": "匯入系統代理",
-  "command.testProxy": "測試代理",
-  "command.toggleProxy": "切換代理",
+  "command.importProxy": "otak: 匯入系統代理",
+  "command.testProxy": "otak: 測試代理",
+  "command.toggleProxy": "otak: 切換代理",
   "config.autoTestEnabled": "在自動模式啟用自動代理連線測試。啟用後會定期測試代理連通性。",
   "config.detectionSourcePriority": "代理偵測來源的優先順序。依序嘗試，直到成功為止。",
   "config.enableFallback": "未偵測到系統代理時回退到手動代理（僅自動模式）。啟用後，如未偵測到系統代理，擴充將嘗試使用手動設定的代理作為回退。",

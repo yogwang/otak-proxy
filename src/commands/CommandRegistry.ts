@@ -116,6 +116,7 @@ export class CommandRegistry {
         this.registerTestProxy(context);
         this.registerImportProxy(context);
         this.registerToggleShowProxyUrl(context);
+        this.registerToggleTargetCommands(context);
 
         // Register listeners
         this.registerConfigChangeListener(context);
@@ -175,6 +176,30 @@ export class CommandRegistry {
             async () => executeToggleShowProxyUrl(this.commandContext)
         );
         context.subscriptions.push(disposable);
+    }
+
+    /**
+     * Register commands to toggle individual proxy targets from the tooltip
+     */
+    private registerToggleTargetCommands(context: vscode.ExtensionContext): void {
+        const targetKeys = ['vscode', 'git', 'npm', 'terminal'] as const;
+        for (const key of targetKeys) {
+            const disposable = vscode.commands.registerCommand(
+                `otak-proxy.toggleTarget.${key}`,
+                async () => {
+                    try {
+                        const section = vscode.workspace.getConfiguration('otakProxy.targets');
+                        const current = section.get<boolean>(key, true);
+                        await section.update(key, !current, vscode.ConfigurationTarget.Global);
+                        const state = await this.commandContext.getProxyState();
+                        this.commandContext.updateStatusBar(state);
+                    } catch (error) {
+                        Logger.error(`Failed to toggle target ${key}:`, error);
+                    }
+                }
+            );
+            context.subscriptions.push(disposable);
+        }
     }
 
     /**

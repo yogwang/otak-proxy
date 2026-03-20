@@ -29,6 +29,7 @@ The extension updates VS Code, Git, and npm proxy settings, plus proxy environme
 
 - **Three modes** — Off, Manual, or Auto (syncs with system proxy).
 - **Status bar toggle** — One click to switch modes.
+- **Per-target proxy control** — Enable or disable proxy independently for VS Code, Git, npm, and integrated terminals.
 - **Auto-sync** — Detects system/browser proxy changes in real time.
 - **Connection validation** — Tests proxy connectivity before enabling.
 - **Integrated terminal env** — Sets HTTP(S)_PROXY for new VS Code terminals.
@@ -54,6 +55,17 @@ Off → Manual → Auto → Off
 - `Auto (Fallback): http://...` — System unavailable, using manual
 - `Auto: OFF` — Waiting for proxy availability
 
+### Per-Target Proxy Control
+
+By default, the proxy applies to all four targets: **VS Code**, **Git**, **npm**, and **Terminal**.
+
+You can toggle individual targets:
+- From the **status bar tooltip** — click a target name to enable/disable it.
+- From the **Command Palette** — run `otak: Toggle VSCode/Git/npm/Terminal Proxy Target`.
+- From **Settings** — set `otakProxy.targets.vscode`, `.git`, `.npm`, or `.terminal` to `false`.
+
+When a target is disabled, its proxy configuration is automatically cleared.
+
 ### Integrated Terminal Environment
 
 When proxy is enabled, otak-proxy injects the following variables into **newly created** VS Code integrated terminals:
@@ -69,7 +81,11 @@ Existing terminals keep their current environment; reopen a terminal if you want
 {
   "otakProxy.proxyUrl": "http://proxy.example.com:8080",
   "otakProxy.pollingInterval": 30,
-  "otakProxy.enableFallback": true
+  "otakProxy.enableFallback": true,
+  "otakProxy.targets.vscode": true,
+  "otakProxy.targets.git": true,
+  "otakProxy.targets.npm": true,
+  "otakProxy.targets.terminal": true
 }
 ```
 
@@ -78,6 +94,10 @@ Existing terminals keep their current environment; reopen a terminal if you want
 - **`otakProxy.proxyUrl`**: Manual proxy URL (default: unset)
 - **`otakProxy.pollingInterval`**: System proxy check interval in seconds (default: `30`)
 - **`otakProxy.enableFallback`**: Fall back to manual when system unavailable (default: `true`)
+- **`otakProxy.targets.vscode`**: Apply proxy to VS Code settings (default: `true`)
+- **`otakProxy.targets.git`**: Apply proxy to Git global configuration (default: `true`)
+- **`otakProxy.targets.npm`**: Apply proxy to npm configuration (default: `true`)
+- **`otakProxy.targets.terminal`**: Inject proxy env variables into new integrated terminals (default: `true`)
 
 ## Commands
 
@@ -86,7 +106,10 @@ Access via the Command Palette (`Cmd/Ctrl+Shift+P`):
 - `otak: Toggle Proxy`
 - `otak: Test Proxy`
 - `otak: Import System Proxy`
-- `Configure Manual`
+- `otak: Toggle VSCode Proxy Target`
+- `otak: Toggle Git Proxy Target`
+- `otak: Toggle npm Proxy Target`
+- `otak: Toggle Terminal Proxy Target`
 
 ## Requirements
 

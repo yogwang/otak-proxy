@@ -2,6 +2,7 @@
   "command.toggleProxy": "otak: Proxyを切り替え",
   "command.testProxy": "otak: Proxyをテスト",
   "command.importProxy": "otak: システムProxyをインポート",
+  "command.toggleShowProxyUrl": "otak: Proxy URL表示を切り替え",
 
   "config.proxyUrl": "VSCode・Git・npm・統合ターミナルのproxy設定用のProxyサーバーURL（例: http://proxy.example.com:8080）",
   "config.pollingInterval": "Autoモードのポーリング間隔（秒単位、10-300）。システムproxyの変更をチェックする頻度。",
@@ -11,6 +12,7 @@
   "config.autoTestEnabled": "Autoモードで自動Proxy接続テストを有効にする。有効な場合、定期的にProxyの疎通性をテストします。",
   "config.enableFallback": "システムProxyが検出されない場合に手動Proxyへフォールバックする（Autoモード専用）。有効な場合、システムProxyが検出されないと手動設定されたProxyをフォールバックとして使用します。",
   "config.enableFallback.description": "有効にすると、AutoモードでシステムProxyが検出されない場合、手動で設定されたProxyをフォールバックとして使用します。",
+  "config.showProxyUrl": "ステータスバーにProxy URLを表示する",
   "config.syncEnabled": "複数のVSCode/Cursorインスタンス間で同期を有効にする。有効な場合、Proxy設定がすべてのインスタンス間で共有されます。",
   "config.syncInterval": "同期チェック間隔（ミリ秒、100-5000）。他のインスタンスからの変更をチェックする頻度。",
 
@@ -100,6 +102,7 @@
   "statusbar.manualWithProxy": "Manual: {url}",
   "statusbar.manualWithUrl": "Manual: {url}",
   "statusbar.manualNotConfigured": "Manual: 未設定",
+  "statusbar.urlHidden": "設定済み",
   "statusbar.tooltip.proxyConfiguration": "Proxy設定",
   "statusbar.tooltip.title": "Proxy設定",
   "statusbar.tooltip.currentMode": "現在のモード",
@@ -125,6 +128,8 @@
   "statusbar.link.configureManual": "手動設定",
   "statusbar.link.importSystem": "システムからインポート",
   "statusbar.link.testProxy": "Proxyをテスト",
+  "statusbar.link.showProxyUrl": "URLを表示",
+  "statusbar.link.hideProxyUrl": "URLを非表示",
 
   "progress.testingProxy": "Proxyをテスト中 {current}/{total}...",
   "progress.testingProxyUrl": "Proxyをテスト中 {current}/{total}: {url}",

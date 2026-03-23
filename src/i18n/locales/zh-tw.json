@@ -2,6 +2,7 @@
   "command.toggleProxy": "otak: 切換代理",
   "command.testProxy": "otak: 測試代理",
   "command.importProxy": "otak: 匯入系統代理",
+  "command.toggleShowProxyUrl": "otak: 切換代理 URL 顯示",
 
   "config.proxyUrl": "用於 VS Code、Git、npm 以及整合式終端機代理設定的代理伺服器 URL（例如：http://proxy.example.com:8080）",
   "config.pollingInterval": "自動模式輪詢間隔（秒，10-300）。檢查系統代理變更的頻率。",
@@ -11,6 +12,7 @@
   "config.autoTestEnabled": "在自動模式啟用自動代理連線測試。啟用後會定期測試代理連通性。",
   "config.enableFallback": "未偵測到系統代理時回退到手動代理（僅自動模式）。啟用後，如未偵測到系統代理，擴充將嘗試使用手動設定的代理作為回退。",
   "config.enableFallback.description": "啟用後，在自動模式下若未偵測到系統代理，擴充將嘗試使用手動設定的代理作為回退。",
+  "config.showProxyUrl": "在狀態列中顯示代理 URL",
   "config.syncEnabled": "啟用多個 VSCode/Cursor 執行個體之間的同步。啟用後，代理設定會在所有執行個體間共用。",
   "config.syncInterval": "同步檢查間隔（毫秒，100-5000）。檢查其他執行個體變更的頻率。",
 
@@ -100,6 +102,7 @@
   "statusbar.manualWithProxy": "手動：{url}",
   "statusbar.manualWithUrl": "手動：{url}",
   "statusbar.manualNotConfigured": "手動：未設定",
+  "statusbar.urlHidden": "已設定",
   "statusbar.tooltip.proxyConfiguration": "代理設定",
   "statusbar.tooltip.title": "代理設定",
   "statusbar.tooltip.currentMode": "目前模式",
@@ -125,6 +128,8 @@
   "statusbar.link.configureManual": "手動設定",
   "statusbar.link.importSystem": "從系統匯入",
   "statusbar.link.testProxy": "測試代理",
+  "statusbar.link.showProxyUrl": "顯示 URL",
+  "statusbar.link.hideProxyUrl": "隱藏 URL",
 
   "progress.testingProxy": "正在測試代理 {current}/{total}...",
   "progress.testingProxyUrl": "正在測試代理 {current}/{total}：{url}",

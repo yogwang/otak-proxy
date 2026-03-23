@@ -38,6 +38,10 @@
       {
         "command": "otak-proxy.importProxy",
         "title": "%command.importProxy%"
+      },
+      {
+        "command": "otak-proxy.toggleShowProxyUrl",
+        "title": "%command.toggleShowProxyUrl%"
       }
     ],
     "configuration": {
@@ -102,6 +106,12 @@
           "default": true,
           "scope": "machine-overridable",
           "description": "%config.enableFallback%"
+        },
+        "otakProxy.showProxyUrl": {
+          "type": "boolean",
+          "default": true,
+          "scope": "machine-overridable",
+          "description": "%config.showProxyUrl%"
         },
         "otakProxy.syncEnabled": {
           "type": "boolean",

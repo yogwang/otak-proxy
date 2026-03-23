@@ -114,6 +114,7 @@ export class CommandRegistry {
         this.registerConfigureUrl(context);
         this.registerTestProxy(context);
         this.registerImportProxy(context);
+        this.registerToggleShowProxyUrl(context);
 
         // Register listeners
         this.registerConfigChangeListener(context);
@@ -165,6 +166,34 @@ export class CommandRegistry {
     }
 
     /**
+     * Register command to toggle proxy URL visibility in the status bar
+     */
+    private registerToggleShowProxyUrl(context: vscode.ExtensionContext): void {
+        const disposable = vscode.commands.registerCommand(
+            'otak-proxy.toggleShowProxyUrl',
+            async () => {
+                try {
+                    const config = vscode.workspace.getConfiguration('otakProxy');
+                    const current = config.get<boolean>('showProxyUrl', true);
+                    const newValue = !current;
+                    Logger.info(`Toggling showProxyUrl: ${current} -> ${newValue}`);
+                    await config.update('showProxyUrl', newValue, vscode.ConfigurationTarget.Global);
+
+                    // Re-read after update to confirm the write took effect
+                    const confirmed = vscode.workspace.getConfiguration('otakProxy').get<boolean>('showProxyUrl', true);
+                    Logger.info(`showProxyUrl after update: ${confirmed}`);
+
+                    const state = await this.commandContext.getProxyState();
+                    this.commandContext.updateStatusBar(state);
+                } catch (error) {
+                    Logger.error('Failed to toggle showProxyUrl:', error);
+                }
+            }
+        );
+        context.subscriptions.push(disposable);
+    }
+
+    /**
      * Register configuration change listener
      */
     private registerConfigChangeListener(context: vscode.ExtensionContext): void {
@@ -183,6 +212,10 @@ export class CommandRegistry {
 
             if (e.affectsConfiguration('otakProxy.maxRetries')) {
                 this.handleMaxRetriesChange();
+            }
+
+            if (e.affectsConfiguration('otakProxy.showProxyUrl')) {
+                await this.handleShowProxyUrlChange();
             }
         });
         context.subscriptions.push(disposable);
@@ -244,6 +277,14 @@ export class CommandRegistry {
             maxRetries: newMaxRetries
         });
         Logger.info(`Max retries updated to ${newMaxRetries}`);
+    }
+
+    /**
+     * Handle showProxyUrl configuration change
+     */
+    private async handleShowProxyUrlChange(): Promise<void> {
+        const state = await this.commandContext.getProxyState();
+        this.commandContext.updateStatusBar(state);
     }
 
     /**

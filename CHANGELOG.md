@@ -1,5 +1,12 @@
 # Change Log
 
+## [2.2.8] - 2026-03-23
+
+### Changed
+- Add `otak:` prefix to all command titles for better discoverability in the Command Palette (PR #3 by @yogwang)
+- Deduplicate and reorder i18n locale entries by scope
+- Enrich config descriptions for `enableFallback`, `syncEnabled`, `syncInterval` across all locales
+
 ## [2.2.7] - 2026-02-17
 
 ### Changed

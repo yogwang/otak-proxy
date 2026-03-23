@@ -83,9 +83,9 @@ Existing terminals keep their current environment; reopen a terminal if you want
 
 Access via the Command Palette (`Cmd/Ctrl+Shift+P`):
 
-- `Toggle Proxy`
-- `Test Proxy`
-- `Import System Proxy`
+- `otak: Toggle Proxy`
+- `otak: Test Proxy`
+- `otak: Import System Proxy`
 - `Configure Manual`
 
 ## Requirements

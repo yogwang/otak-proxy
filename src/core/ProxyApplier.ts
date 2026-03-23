@@ -10,6 +10,13 @@ import { ErrorAggregator } from '../errors/ErrorAggregator';
 import { Logger } from '../utils/Logger';
 import { ProxyStateManager } from './ProxyStateManager';
 
+export interface ProxyTargets {
+    vscode: boolean;
+    git: boolean;
+    npm: boolean;
+    terminal: boolean;
+}
+
 /**
  * ProxyApplier handles the application and removal of proxy settings
  * across all configuration targets (Git, VSCode, npm).
@@ -67,40 +74,53 @@ export class ProxyApplier {
             }
         }
         
-        let gitSuccess = false;
-        let vscodeSuccess = false;
-        let npmSuccess = false;
+        const targets = ProxyApplier.getProxyTargets();
+        let gitSuccess = !targets.git;
+        let vscodeSuccess = !targets.vscode;
+        let npmSuccess = !targets.npm;
         let terminalEnvSuccess = true;
 
         // Requirement 2.2: Try VSCode configuration, continue on failure
-        vscodeSuccess = await this.updateManager(
-            this.vscodeManager,
-            'VSCode configuration',
-            enabled,
-            proxyUrl,
-            errorAggregator
-        );
+        if (targets.vscode) {
+            vscodeSuccess = await this.updateManager(
+                this.vscodeManager,
+                'VSCode configuration',
+                enabled,
+                proxyUrl,
+                errorAggregator
+            );
+        } else {
+            await this.trySilentUnset(this.vscodeManager, 'VSCode configuration');
+        }
 
         // Try Git configuration
-        gitSuccess = await this.updateManager(
-            this.gitManager,
-            'Git configuration',
-            enabled,
-            proxyUrl,
-            errorAggregator
-        );
+        if (targets.git) {
+            gitSuccess = await this.updateManager(
+                this.gitManager,
+                'Git configuration',
+                enabled,
+                proxyUrl,
+                errorAggregator
+            );
+        } else {
+            await this.trySilentUnset(this.gitManager, 'Git configuration');
+        }
 
         // Try npm configuration
-        npmSuccess = await this.updateManager(
-            this.npmManager,
-            'npm configuration',
-            enabled,
-            proxyUrl,
-            errorAggregator
-        );
+        if (targets.npm) {
+            npmSuccess = await this.updateManager(
+                this.npmManager,
+                'npm configuration',
+                enabled,
+                proxyUrl,
+                errorAggregator
+            );
+        } else {
+            await this.trySilentUnset(this.npmManager, 'npm configuration');
+        }
 
         // Try VSCode integrated terminal environment variables (best-effort)
-        if (this.terminalEnvManager) {
+        if (targets.terminal && this.terminalEnvManager) {
             terminalEnvSuccess = await this.updateManager(
                 this.terminalEnvManager,
                 'Terminal environment',
@@ -108,6 +128,8 @@ export class ProxyApplier {
                 proxyUrl,
                 errorAggregator
             );
+        } else if (!targets.terminal && this.terminalEnvManager) {
+            await this.trySilentUnset(this.terminalEnvManager, 'Terminal environment');
         }
 
         // Track configuration state if stateManager is provided
@@ -156,53 +178,60 @@ export class ProxyApplier {
      */
     async disableProxy(): Promise<boolean> {
         const errorAggregator = new ErrorAggregator();
+        const targets = ProxyApplier.getProxyTargets();
         
-        let gitSuccess = false;
-        let vscodeSuccess = false;
-        let npmSuccess = false;
+        let gitSuccess = !targets.git;
+        let vscodeSuccess = !targets.vscode;
+        let npmSuccess = !targets.npm;
         let terminalEnvSuccess = true;
 
         // Use GitConfigManager.unsetProxy()
-        try {
-            const result = await this.gitManager.unsetProxy();
-            if (!result.success) {
-                errorAggregator.addError('Git configuration', result.error || 'Failed to unset Git proxy');
-            } else {
-                gitSuccess = true;
+        if (targets.git) {
+            try {
+                const result = await this.gitManager.unsetProxy();
+                if (!result.success) {
+                    errorAggregator.addError('Git configuration', result.error || 'Failed to unset Git proxy');
+                } else {
+                    gitSuccess = true;
+                }
+            } catch (error) {
+                const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+                errorAggregator.addError('Git configuration', errorMsg);
             }
-        } catch (error) {
-            const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-            errorAggregator.addError('Git configuration', errorMsg);
         }
 
         // Use VscodeConfigManager.unsetProxy()
-        try {
-            const result = await this.vscodeManager.unsetProxy();
-            if (!result.success) {
-                errorAggregator.addError('VSCode configuration', result.error || 'Failed to unset VSCode proxy');
-            } else {
-                vscodeSuccess = true;
+        if (targets.vscode) {
+            try {
+                const result = await this.vscodeManager.unsetProxy();
+                if (!result.success) {
+                    errorAggregator.addError('VSCode configuration', result.error || 'Failed to unset VSCode proxy');
+                } else {
+                    vscodeSuccess = true;
+                }
+            } catch (error) {
+                const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+                errorAggregator.addError('VSCode configuration', errorMsg);
             }
-        } catch (error) {
-            const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-            errorAggregator.addError('VSCode configuration', errorMsg);
         }
 
         // Use NpmConfigManager.unsetProxy()
-        try {
-            const result = await this.npmManager.unsetProxy();
-            if (!result.success) {
-                errorAggregator.addError('npm configuration', result.error || 'Failed to unset npm proxy');
-            } else {
-                npmSuccess = true;
+        if (targets.npm) {
+            try {
+                const result = await this.npmManager.unsetProxy();
+                if (!result.success) {
+                    errorAggregator.addError('npm configuration', result.error || 'Failed to unset npm proxy');
+                } else {
+                    npmSuccess = true;
+                }
+            } catch (error) {
+                const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+                errorAggregator.addError('npm configuration', errorMsg);
             }
-        } catch (error) {
-            const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-            errorAggregator.addError('npm configuration', errorMsg);
         }
 
         // Use TerminalEnvConfigManager.unsetProxy() (best-effort)
-        if (this.terminalEnvManager) {
+        if (targets.terminal && this.terminalEnvManager) {
             try {
                 const result = await this.terminalEnvManager.unsetProxy();
                 if (!result.success) {
@@ -251,6 +280,40 @@ export class ProxyApplier {
         }
 
         return success;
+    }
+
+    /**
+     * Silently unset proxy for a disabled target. Failures are logged but not
+     * surfaced to the user, since the target was explicitly disabled.
+     * 
+     * @param manager - The ConfigManager to unset
+     * @param name - The name of the manager for logging
+     */
+    private async trySilentUnset(
+        manager: GitConfigManager | VscodeConfigManager | NpmConfigManager | TerminalEnvConfigManager,
+        name: string
+    ): Promise<void> {
+        try {
+            await manager.unsetProxy();
+        } catch (error) {
+            Logger.error(`Silent unset failed for ${name}:`, error);
+        }
+    }
+
+    /**
+     * Read which proxy targets are enabled from user configuration (otakProxy.targets.*).
+     * Disabled targets will be skipped during proxy apply/disable operations.
+     * 
+     * @returns ProxyTargets with a boolean flag for each target (defaults to true)
+     */
+    private static getProxyTargets(): ProxyTargets {
+        const section = vscode.workspace.getConfiguration('otakProxy.targets');
+        return {
+            vscode: section.get<boolean>('vscode', true),
+            git: section.get<boolean>('git', true),
+            npm: section.get<boolean>('npm', true),
+            terminal: section.get<boolean>('terminal', true),
+        };
     }
 
     /**

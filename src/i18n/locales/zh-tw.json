@@ -3,6 +3,10 @@
   "command.testProxy": "otak: 測試代理",
   "command.importProxy": "otak: 匯入系統代理",
   "command.toggleShowProxyUrl": "otak: 切換代理 URL 顯示",
+  "command.toggleTarget.vscode": "otak: 切換 VSCode 代理目標",
+  "command.toggleTarget.git": "otak: 切換 Git 代理目標",
+  "command.toggleTarget.npm": "otak: 切換 npm 代理目標",
+  "command.toggleTarget.terminal": "otak: 切換終端代理目標",
 
   "config.proxyUrl": "用於 VS Code、Git、npm 以及整合式終端機代理設定的代理伺服器 URL（例如：http://proxy.example.com:8080）",
   "config.pollingInterval": "自動模式輪詢間隔（秒，10-300）。檢查系統代理變更的頻率。",
@@ -13,6 +17,10 @@
   "config.enableFallback": "未偵測到系統代理時回退到手動代理（僅自動模式）。啟用後，如未偵測到系統代理，擴充將嘗試使用手動設定的代理作為回退。",
   "config.enableFallback.description": "啟用後，在自動模式下若未偵測到系統代理，擴充將嘗試使用手動設定的代理作為回退。",
   "config.showProxyUrl": "在狀態列中顯示代理 URL",
+  "config.targets.vscode": "將代理套用到 VSCode 設定（http.proxy）。影響 VSCode 自身的網路請求和內建擴充。",
+  "config.targets.git": "將代理套用到 Git 全域設定（~/.gitconfig 中的 http.proxy / https.proxy）。影響系統範圍內的所有 git 操作。",
+  "config.targets.npm": "將代理套用到 npm 設定（~/.npmrc 中的 proxy / https-proxy）。影響系統範圍內的所有 npm 操作。",
+  "config.targets.terminal": "向新建立的整合式終端機注入代理環境變數（HTTP_PROXY、HTTPS_PROXY 等）。",
   "config.syncEnabled": "啟用多個 VSCode/Cursor 執行個體之間的同步。啟用後，代理設定會在所有執行個體間共用。",
   "config.syncInterval": "同步檢查間隔（毫秒，100-5000）。檢查其他執行個體變更的頻率。",
 
@@ -130,6 +138,12 @@
   "statusbar.link.testProxy": "測試代理",
   "statusbar.link.showProxyUrl": "顯示 URL",
   "statusbar.link.hideProxyUrl": "隱藏 URL",
+
+  "statusbar.tooltip.proxyTargets": "代理目標",
+  "statusbar.target.vscode": "VSCode",
+  "statusbar.target.git": "Git",
+  "statusbar.target.npm": "npm",
+  "statusbar.target.terminal": "終端機",
 
   "progress.testingProxy": "正在測試代理 {current}/{total}...",
   "progress.testingProxyUrl": "正在測試代理 {current}/{total}：{url}",

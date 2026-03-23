@@ -42,6 +42,22 @@
       {
         "command": "otak-proxy.toggleShowProxyUrl",
         "title": "%command.toggleShowProxyUrl%"
+      },
+      {
+        "command": "otak-proxy.toggleTarget.vscode",
+        "title": "%command.toggleTarget.vscode%"
+      },
+      {
+        "command": "otak-proxy.toggleTarget.git",
+        "title": "%command.toggleTarget.git%"
+      },
+      {
+        "command": "otak-proxy.toggleTarget.npm",
+        "title": "%command.toggleTarget.npm%"
+      },
+      {
+        "command": "otak-proxy.toggleTarget.terminal",
+        "title": "%command.toggleTarget.terminal%"
       }
     ],
     "configuration": {
@@ -112,6 +128,30 @@
           "default": true,
           "scope": "machine-overridable",
           "description": "%config.showProxyUrl%"
+        },
+        "otakProxy.targets.vscode": {
+          "type": "boolean",
+          "default": true,
+          "scope": "machine-overridable",
+          "description": "%config.targets.vscode%"
+        },
+        "otakProxy.targets.git": {
+          "type": "boolean",
+          "default": true,
+          "scope": "machine-overridable",
+          "description": "%config.targets.git%"
+        },
+        "otakProxy.targets.npm": {
+          "type": "boolean",
+          "default": true,
+          "scope": "machine-overridable",
+          "description": "%config.targets.npm%"
+        },
+        "otakProxy.targets.terminal": {
+          "type": "boolean",
+          "default": true,
+          "scope": "machine-overridable",
+          "description": "%config.targets.terminal%"
         },
         "otakProxy.syncEnabled": {
           "type": "boolean",

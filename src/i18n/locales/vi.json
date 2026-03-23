@@ -3,6 +3,10 @@
   "command.testProxy": "otak: Kiểm tra Proxy",
   "command.importProxy": "otak: Nhập Proxy hệ thống",
   "command.toggleShowProxyUrl": "otak: Bật/tắt hiển thị URL Proxy",
+  "command.toggleTarget.vscode": "otak: Bật/tắt mục tiêu Proxy VSCode",
+  "command.toggleTarget.git": "otak: Bật/tắt mục tiêu Proxy Git",
+  "command.toggleTarget.npm": "otak: Bật/tắt mục tiêu Proxy npm",
+  "command.toggleTarget.terminal": "otak: Bật/tắt mục tiêu Proxy Terminal",
 
   "config.proxyUrl": "URL máy chủ proxy (ví dụ: http://proxy.example.com:8080) dùng cho cài đặt proxy của VS Code, Git, npm và terminal tích hợp",
   "config.pollingInterval": "Khoảng thời gian thăm dò ở chế độ Tự động (giây, 10-300). Tần suất kiểm tra thay đổi proxy hệ thống.",
@@ -13,6 +17,10 @@
   "config.enableFallback": "Bật dự phòng sang proxy thủ công khi không phát hiện được proxy hệ thống (chỉ chế độ Tự động). Khi bật, nếu không phát hiện proxy hệ thống, tiện ích sẽ thử dùng proxy thủ công đã cấu hình làm dự phòng.",
   "config.enableFallback.description": "When enabled, if no system proxy is detected in Auto mode, the extension will try to use the manually configured proxy as a fallback.",
   "config.showProxyUrl": "Hiển thị URL proxy trên thanh trạng thái",
+  "config.targets.vscode": "Áp dụng proxy cho cài đặt VSCode (http.proxy). Ảnh hưởng đến yêu cầu mạng của VSCode và các tiện ích tích hợp.",
+  "config.targets.git": "Áp dụng proxy cho cấu hình Git toàn cục (http.proxy / https.proxy trong ~/.gitconfig). Ảnh hưởng đến tất cả các hoạt động git trên toàn hệ thống.",
+  "config.targets.npm": "Áp dụng proxy cho cấu hình npm (proxy / https-proxy trong ~/.npmrc). Ảnh hưởng đến tất cả các hoạt động npm trên toàn hệ thống.",
+  "config.targets.terminal": "Tiêm biến môi trường proxy (HTTP_PROXY, HTTPS_PROXY, v.v.) vào các terminal tích hợp mới tạo.",
   "config.syncEnabled": "Bật đồng bộ giữa nhiều phiên VSCode/Cursor. Khi bật, cài đặt proxy sẽ được chia sẻ giữa tất cả các phiên.",
   "config.syncInterval": "Chu kỳ kiểm tra đồng bộ (mili giây, 100-5000). Tần suất kiểm tra thay đổi từ các phiên khác.",
 
@@ -130,6 +138,12 @@
   "statusbar.link.testProxy": "Test Proxy",
   "statusbar.link.showProxyUrl": "Hiện URL",
   "statusbar.link.hideProxyUrl": "Ẩn URL",
+
+  "statusbar.tooltip.proxyTargets": "Đối tượng proxy",
+  "statusbar.target.vscode": "VSCode",
+  "statusbar.target.git": "Git",
+  "statusbar.target.npm": "npm",
+  "statusbar.target.terminal": "Terminal",
 
   "progress.testingProxy": "Testing proxy {current} of {total}...",
   "progress.testingProxyUrl": "Testing proxy {current} of {total}: {url}",

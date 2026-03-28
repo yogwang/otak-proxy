@@ -1,5 +1,17 @@
 # Change Log
 
+## [2.2.9] - 2026-03-28
+
+### Added
+- Add `otakProxy.showProxyUrl` setting and `otak: Toggle Proxy URL Visibility` command to show/hide the proxy URL in the status bar for privacy (PR #7 by @yogwang)
+  - When hidden, URLs are replaced with localized "Configured" text in both status bar and tooltip
+
+### Fixed
+- Deduplicate sync events to stop redundant "Proxy configured" notifications during multi-instance synchronization (PR #6 by @yogwang, closes #5)
+  - Add version/state deduplication in SyncManager and ConflictResolver
+  - Implement notification throttling in UserNotifier
+  - Add silent mode for background sync and monitor-driven proxy transitions
+
 ## [2.2.8] - 2026-03-23
 
 ### Changed

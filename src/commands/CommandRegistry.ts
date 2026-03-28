@@ -16,6 +16,7 @@ import { executeToggleProxy } from './ToggleProxyCommand';
 import { executeConfigureUrl } from './ConfigureUrlCommand';
 import { executeTestProxy } from './TestProxyCommand';
 import { executeImportProxy } from './ImportProxyCommand';
+import { executeToggleShowProxyUrl } from './ToggleShowProxyUrlCommand';
 import type { ProxyMonitorConfig } from '../monitoring/ProxyMonitor';
 
 /**
@@ -114,6 +115,7 @@ export class CommandRegistry {
         this.registerConfigureUrl(context);
         this.registerTestProxy(context);
         this.registerImportProxy(context);
+        this.registerToggleShowProxyUrl(context);
 
         // Register listeners
         this.registerConfigChangeListener(context);
@@ -165,6 +167,17 @@ export class CommandRegistry {
     }
 
     /**
+     * Register command to toggle proxy URL visibility in the status bar
+     */
+    private registerToggleShowProxyUrl(context: vscode.ExtensionContext): void {
+        const disposable = vscode.commands.registerCommand(
+            'otak-proxy.toggleShowProxyUrl',
+            async () => executeToggleShowProxyUrl(this.commandContext)
+        );
+        context.subscriptions.push(disposable);
+    }
+
+    /**
      * Register configuration change listener
      */
     private registerConfigChangeListener(context: vscode.ExtensionContext): void {
@@ -183,6 +196,10 @@ export class CommandRegistry {
 
             if (e.affectsConfiguration('otakProxy.maxRetries')) {
                 this.handleMaxRetriesChange();
+            }
+
+            if (e.affectsConfiguration('otakProxy.showProxyUrl')) {
+                await this.handleShowProxyUrlChange();
             }
         });
         context.subscriptions.push(disposable);
@@ -244,6 +261,14 @@ export class CommandRegistry {
             maxRetries: newMaxRetries
         });
         Logger.info(`Max retries updated to ${newMaxRetries}`);
+    }
+
+    /**
+     * Handle showProxyUrl configuration change
+     */
+    private async handleShowProxyUrlChange(): Promise<void> {
+        const state = await this.commandContext.getProxyState();
+        this.commandContext.updateStatusBar(state);
     }
 
     /**

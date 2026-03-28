@@ -76,7 +76,8 @@ export class StatusBarManager {
         'otak-proxy.toggleProxy',
         'otak-proxy.configureUrl',
         'otak-proxy.testProxy',
-        'otak-proxy.importProxy'
+        'otak-proxy.importProxy',
+        'otak-proxy.toggleShowProxyUrl'
     ];
 
     constructor(context: vscode.ExtensionContext) {
@@ -112,6 +113,7 @@ export class StatusBarManager {
     update(state: ProxyState): void {
         const i18n = I18nManager.getInstance();
         const activeUrl = this.getActiveProxyUrl(state);
+        const showUrl = vscode.workspace.getConfiguration('otakProxy').get<boolean>('showProxyUrl', true);
         let text = '';
         let statusText = '';
 
@@ -130,12 +132,14 @@ export class StatusBarManager {
                 }
                 // Task 4.1: Handle fallback proxy state
                 else if (state.usingFallbackProxy && state.fallbackProxyUrl) {
-                    text = `$(plug) ${i18n.t('statusbar.autoFallback', { url: state.fallbackProxyUrl })}`;
-                    statusText = i18n.t('statusbar.tooltip.autoFallback', { url: state.fallbackProxyUrl });
+                    const fallbackDisplay = showUrl ? state.fallbackProxyUrl : i18n.t('statusbar.urlHidden');
+                    text = `$(plug) ${i18n.t('statusbar.autoFallback', { url: fallbackDisplay })}`;
+                    statusText = i18n.t('statusbar.tooltip.autoFallback', { url: fallbackDisplay });
                 }
                 else if (activeUrl) {
-                    text = `$(sync~spin) ${i18n.t('statusbar.autoWithUrl', { url: activeUrl })}`;
-                    statusText = i18n.t('statusbar.tooltip.autoModeUsing', { url: activeUrl });
+                    const urlDisplay = showUrl ? activeUrl : i18n.t('statusbar.urlHidden');
+                    text = `$(sync~spin) ${i18n.t('statusbar.autoWithUrl', { url: urlDisplay })}`;
+                    statusText = i18n.t('statusbar.tooltip.autoModeUsing', { url: urlDisplay });
                 } else {
                     text = `$(sync~spin) ${i18n.t('statusbar.autoNoProxy')}`;
                     statusText = i18n.t('statusbar.tooltip.autoModeNoProxy');
@@ -143,8 +147,9 @@ export class StatusBarManager {
                 break;
             case ProxyMode.Manual:
                 if (activeUrl) {
-                    text = `$(plug) ${i18n.t('statusbar.manualWithUrl', { url: activeUrl })}`;
-                    statusText = i18n.t('statusbar.tooltip.manualModeUsing', { url: activeUrl });
+                    const urlDisplay = showUrl ? activeUrl : i18n.t('statusbar.urlHidden');
+                    text = `$(plug) ${i18n.t('statusbar.manualWithUrl', { url: urlDisplay })}`;
+                    statusText = i18n.t('statusbar.tooltip.manualModeUsing', { url: urlDisplay });
                 } else {
                     text = `$(plug) ${i18n.t('statusbar.manualNotConfigured')}`;
                     statusText = i18n.t('statusbar.tooltip.manualModeNotConfigured');
@@ -205,12 +210,15 @@ export class StatusBarManager {
             }
         }
 
-        // Proxy URLs
+        // Proxy URLs (respect showProxyUrl privacy setting)
+        const showUrl = vscode.workspace.getConfiguration('otakProxy').get<boolean>('showProxyUrl', true);
         if (state.manualProxyUrl) {
-            tooltip.appendMarkdown(`**${i18n.t('statusbar.tooltip.manualProxy')}:** ${this.sanitizer.maskPassword(state.manualProxyUrl)}\n\n`);
+            const display = showUrl ? this.sanitizer.maskPassword(state.manualProxyUrl) : i18n.t('statusbar.urlHidden');
+            tooltip.appendMarkdown(`**${i18n.t('statusbar.tooltip.manualProxy')}:** ${display}\n\n`);
         }
         if (state.autoProxyUrl) {
-            tooltip.appendMarkdown(`**${i18n.t('statusbar.tooltip.systemProxy')}:** ${this.sanitizer.maskPassword(state.autoProxyUrl)}\n\n`);
+            const display = showUrl ? this.sanitizer.maskPassword(state.autoProxyUrl) : i18n.t('statusbar.urlHidden');
+            tooltip.appendMarkdown(`**${i18n.t('statusbar.tooltip.systemProxy')}:** ${display}\n\n`);
         }
 
         tooltip.appendMarkdown(`---\n\n`);
@@ -227,11 +235,18 @@ export class StatusBarManager {
      * Requirement 5.3: Validate command links
      */
     private appendCommandLinks(tooltip: vscode.MarkdownString, i18n: I18nManager): void {
+        const showUrl = vscode.workspace.getConfiguration('otakProxy').get<boolean>('showProxyUrl', true);
+        const toggleUrlIcon = showUrl ? '$(eye-closed)' : '$(eye)';
+        const toggleUrlLabel = showUrl
+            ? i18n.t('statusbar.link.hideProxyUrl')
+            : i18n.t('statusbar.link.showProxyUrl');
+
         const commandLinks = [
             { icon: '$(sync)', label: i18n.t('statusbar.link.toggleMode'), command: 'otak-proxy.toggleProxy' },
             { icon: '$(gear)', label: i18n.t('statusbar.link.configureManual'), command: 'otak-proxy.configureUrl' },
             { icon: '$(cloud-download)', label: i18n.t('statusbar.link.importSystem'), command: 'otak-proxy.importProxy' },
-            { icon: '$(debug-start)', label: i18n.t('statusbar.link.testProxy'), command: 'otak-proxy.testProxy' }
+            { icon: '$(debug-start)', label: i18n.t('statusbar.link.testProxy'), command: 'otak-proxy.testProxy' },
+            { icon: toggleUrlIcon, label: toggleUrlLabel, command: 'otak-proxy.toggleShowProxyUrl' }
         ];
 
         // Validate command links

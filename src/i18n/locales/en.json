@@ -2,6 +2,7 @@
   "command.toggleProxy": "otak: Toggle Proxy",
   "command.testProxy": "otak: Test Proxy",
   "command.importProxy": "otak: Import System Proxy",
+  "command.toggleShowProxyUrl": "otak: Toggle Proxy URL Visibility",
 
   "config.proxyUrl": "Proxy server URL (e.g., http://proxy.example.com:8080) for VSCode, Git, npm, and integrated terminal proxy settings",
   "config.pollingInterval": "Auto mode polling interval in seconds (10-300). How often to check for system proxy changes.",
@@ -11,6 +12,7 @@
   "config.autoTestEnabled": "Enable automatic proxy connection testing in Auto mode. When enabled, proxy connectivity is tested periodically.",
   "config.enableFallback": "Enable fallback to manual proxy when system proxy is not detected (Auto mode only). When enabled, if no system proxy is detected, the extension will try to use the manually configured proxy as a fallback.",
   "config.enableFallback.description": "When enabled, if no system proxy is detected in Auto mode, the extension will try to use the manually configured proxy as a fallback.",
+  "config.showProxyUrl": "Show proxy URL in the status bar",
   "config.syncEnabled": "Enable synchronization between multiple VSCode/Cursor instances. When enabled, proxy settings are shared across all instances.",
   "config.syncInterval": "Synchronization check interval in milliseconds (100-5000). How often to check for changes from other instances.",
 
@@ -100,6 +102,7 @@
   "statusbar.manualWithProxy": "Manual: {url}",
   "statusbar.manualWithUrl": "Manual: {url}",
   "statusbar.manualNotConfigured": "Manual: Not configured",
+  "statusbar.urlHidden": "Configured",
   "statusbar.tooltip.proxyConfiguration": "Proxy Configuration",
   "statusbar.tooltip.title": "Proxy Configuration",
   "statusbar.tooltip.currentMode": "Current Mode",
@@ -125,6 +128,8 @@
   "statusbar.link.configureManual": "Configure Manual",
   "statusbar.link.importSystem": "Import System",
   "statusbar.link.testProxy": "Test Proxy",
+  "statusbar.link.showProxyUrl": "Show URL",
+  "statusbar.link.hideProxyUrl": "Hide URL",
 
   "progress.testingProxy": "Testing proxy {current} of {total}...",
   "progress.testingProxyUrl": "Testing proxy {current} of {total}: {url}",

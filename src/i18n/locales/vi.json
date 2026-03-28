@@ -2,6 +2,7 @@
   "command.toggleProxy": "otak: Bật/tắt Proxy",
   "command.testProxy": "otak: Kiểm tra Proxy",
   "command.importProxy": "otak: Nhập Proxy hệ thống",
+  "command.toggleShowProxyUrl": "otak: Bật/tắt hiển thị URL Proxy",
 
   "config.proxyUrl": "URL máy chủ proxy (ví dụ: http://proxy.example.com:8080) dùng cho cài đặt proxy của VS Code, Git, npm và terminal tích hợp",
   "config.pollingInterval": "Khoảng thời gian thăm dò ở chế độ Tự động (giây, 10-300). Tần suất kiểm tra thay đổi proxy hệ thống.",
@@ -11,6 +12,7 @@
   "config.autoTestEnabled": "Bật kiểm tra kết nối proxy tự động trong chế độ Tự động. Khi bật, kết nối proxy sẽ được kiểm tra định kỳ.",
   "config.enableFallback": "Bật dự phòng sang proxy thủ công khi không phát hiện được proxy hệ thống (chỉ chế độ Tự động). Khi bật, nếu không phát hiện proxy hệ thống, tiện ích sẽ thử dùng proxy thủ công đã cấu hình làm dự phòng.",
   "config.enableFallback.description": "When enabled, if no system proxy is detected in Auto mode, the extension will try to use the manually configured proxy as a fallback.",
+  "config.showProxyUrl": "Hiển thị URL proxy trên thanh trạng thái",
   "config.syncEnabled": "Bật đồng bộ giữa nhiều phiên VSCode/Cursor. Khi bật, cài đặt proxy sẽ được chia sẻ giữa tất cả các phiên.",
   "config.syncInterval": "Chu kỳ kiểm tra đồng bộ (mili giây, 100-5000). Tần suất kiểm tra thay đổi từ các phiên khác.",
 
@@ -100,6 +102,7 @@
   "statusbar.manualWithProxy": "Manual: {url}",
   "statusbar.manualWithUrl": "Manual: {url}",
   "statusbar.manualNotConfigured": "Manual: Not configured",
+  "statusbar.urlHidden": "Đã cấu hình",
   "statusbar.tooltip.proxyConfiguration": "Proxy Configuration",
   "statusbar.tooltip.title": "Proxy Configuration",
   "statusbar.tooltip.currentMode": "Current Mode",
@@ -125,6 +128,8 @@
   "statusbar.link.configureManual": "Configure Manual",
   "statusbar.link.importSystem": "Import System",
   "statusbar.link.testProxy": "Test Proxy",
+  "statusbar.link.showProxyUrl": "Hiện URL",
+  "statusbar.link.hideProxyUrl": "Ẩn URL",
 
   "progress.testingProxy": "Testing proxy {current} of {total}...",
   "progress.testingProxyUrl": "Testing proxy {current} of {total}: {url}",

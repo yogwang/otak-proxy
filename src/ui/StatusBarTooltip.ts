@@ -31,6 +31,8 @@ export function buildStatusBarTooltip(options: StatusBarTooltipOptions): vscode.
     appendProxyUrls(tooltip, options);
 
     tooltip.appendMarkdown(`---\n\n`);
+    appendTargetToggles(tooltip, options);
+    tooltip.appendMarkdown(`---\n\n`);
     appendCommandLinks(tooltip, options);
 
     return tooltip;
@@ -89,6 +91,29 @@ function appendProxyUrls(tooltip: vscode.MarkdownString, options: StatusBarToolt
             getUrlDisplay(state.autoProxyUrl, showUrl, i18n, sanitizer)
         );
     }
+}
+
+function appendTargetToggles(tooltip: vscode.MarkdownString, options: StatusBarTooltipOptions): void {
+    const { state, i18n } = options;
+    const isOff = state.mode === ProxyMode.Off;
+    const section = vscode.workspace.getConfiguration('otakProxy.targets');
+    const targets = [
+        { key: 'vscode', label: i18n.t('statusbar.target.vscode'), enabled: section.get<boolean>('vscode', true) },
+        { key: 'git', label: i18n.t('statusbar.target.git'), enabled: section.get<boolean>('git', true) },
+        { key: 'npm', label: i18n.t('statusbar.target.npm'), enabled: section.get<boolean>('npm', true) },
+        { key: 'terminal', label: i18n.t('statusbar.target.terminal'), enabled: section.get<boolean>('terminal', true) },
+    ];
+
+    tooltip.appendMarkdown(`**${i18n.t('statusbar.tooltip.proxyTargets')}**\n\n`);
+    for (const t of targets) {
+        const icon = t.enabled ? '$(check)' : '$(circle-large-outline)';
+        if (isOff) {
+            tooltip.appendMarkdown(`${icon} ${t.label} &nbsp; `);
+        } else {
+            tooltip.appendMarkdown(`${icon} [${t.label}](command:otak-proxy.toggleTarget.${t.key}) &nbsp; `);
+        }
+    }
+    tooltip.appendMarkdown(`\n\n`);
 }
 
 function appendCommandLinks(tooltip: vscode.MarkdownString, options: StatusBarTooltipOptions): void {

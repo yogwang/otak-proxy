@@ -42,7 +42,7 @@ const vscodeStub = {
   },
   workspace: {
     getConfiguration: () => ({
-      get: () => undefined,
+      get: (_key, defaultValue) => defaultValue,
       update: async () => undefined,
     }),
     onDidChangeConfiguration: () => ({ dispose: () => {} }),

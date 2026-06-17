@@ -78,7 +78,11 @@ export class StatusBarManager {
         'otak-proxy.configureUrl',
         'otak-proxy.testProxy',
         'otak-proxy.importProxy',
-        'otak-proxy.toggleShowProxyUrl'
+        'otak-proxy.toggleShowProxyUrl',
+        'otak-proxy.toggleTarget.vscode',
+        'otak-proxy.toggleTarget.git',
+        'otak-proxy.toggleTarget.npm',
+        'otak-proxy.toggleTarget.terminal'
     ];
 
     constructor(context: vscode.ExtensionContext) {

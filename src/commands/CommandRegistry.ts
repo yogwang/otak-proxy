@@ -17,6 +17,7 @@ import { executeConfigureUrl } from './ConfigureUrlCommand';
 import { executeTestProxy } from './TestProxyCommand';
 import { executeImportProxy } from './ImportProxyCommand';
 import { executeToggleShowProxyUrl } from './ToggleShowProxyUrlCommand';
+import { executeToggleTarget, ProxyTargetKey } from './ToggleTargetCommand';
 import type { ProxyMonitorConfig } from '../monitoring/ProxyMonitor';
 import { getProxyPublicUrl, hasProxyCredentials, removeProxyCredentials } from '../utils/ProxyStateSanitizer';
 
@@ -183,21 +184,11 @@ export class CommandRegistry {
      * Register commands to toggle individual proxy targets from the tooltip
      */
     private registerToggleTargetCommands(context: vscode.ExtensionContext): void {
-        const targetKeys = ['vscode', 'git', 'npm', 'terminal'] as const;
+        const targetKeys: ProxyTargetKey[] = ['vscode', 'git', 'npm', 'terminal'];
         for (const key of targetKeys) {
             const disposable = vscode.commands.registerCommand(
                 `otak-proxy.toggleTarget.${key}`,
-                async () => {
-                    try {
-                        const section = vscode.workspace.getConfiguration('otakProxy.targets');
-                        const current = section.get<boolean>(key, true);
-                        await section.update(key, !current, vscode.ConfigurationTarget.Global);
-                        const state = await this.commandContext.getProxyState();
-                        this.commandContext.updateStatusBar(state);
-                    } catch (error) {
-                        Logger.error(`Failed to toggle target ${key}:`, error);
-                    }
-                }
+                async () => executeToggleTarget(this.commandContext, key)
             );
             context.subscriptions.push(disposable);
         }

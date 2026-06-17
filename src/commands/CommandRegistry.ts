@@ -10,7 +10,6 @@
 
 import * as vscode from 'vscode';
 import { ProxyMode, ProxyState } from '../core/types';
-import { Logger } from '../utils/Logger';
 import { CommandContext } from './types';
 import { executeToggleProxy } from './ToggleProxyCommand';
 import { executeConfigureUrl } from './ConfigureUrlCommand';
@@ -19,7 +18,7 @@ import { executeImportProxy } from './ImportProxyCommand';
 import { executeToggleShowProxyUrl } from './ToggleShowProxyUrlCommand';
 import { executeToggleTarget, ProxyTargetKey } from './ToggleTargetCommand';
 import type { ProxyMonitorConfig } from '../monitoring/ProxyMonitor';
-import { getProxyPublicUrl, hasProxyCredentials, removeProxyCredentials } from '../utils/ProxyStateSanitizer';
+import * as ConfigChange from './ConfigChangeHandlers';
 
 /**
  * Configuration for CommandRegistry
@@ -198,127 +197,33 @@ export class CommandRegistry {
      * Register configuration change listener
      */
     private registerConfigChangeListener(context: vscode.ExtensionContext): void {
+        const changeCtx: ConfigChange.ConfigChangeContext = {
+            commandContext: this.commandContext,
+            proxyMonitor: this.config.proxyMonitor,
+            systemProxyDetector: this.config.systemProxyDetector
+        };
+
         const disposable = vscode.workspace.onDidChangeConfiguration(async e => {
             if (e.affectsConfiguration('otakProxy.proxyUrl')) {
-                await this.handleProxyUrlChange();
+                await ConfigChange.handleProxyUrlChange(changeCtx);
             }
-
             if (e.affectsConfiguration('otakProxy.pollingInterval')) {
-                this.handlePollingIntervalChange();
+                ConfigChange.handlePollingIntervalChange(changeCtx);
             }
-
             if (e.affectsConfiguration('otakProxy.detectionSourcePriority')) {
-                this.handleDetectionPriorityChange();
+                ConfigChange.handleDetectionPriorityChange(changeCtx);
             }
-
             if (e.affectsConfiguration('otakProxy.maxRetries')) {
-                this.handleMaxRetriesChange();
+                ConfigChange.handleMaxRetriesChange(changeCtx);
             }
-
             if (e.affectsConfiguration('otakProxy.showProxyUrl')) {
-                await this.handleShowProxyUrlChange();
+                await ConfigChange.handleShowProxyUrlChange(changeCtx);
             }
-
             if (e.affectsConfiguration('otakProxy.targets')) {
-                await this.handleTargetChange();
+                await ConfigChange.handleTargetChange(changeCtx);
             }
         });
         context.subscriptions.push(disposable);
-    }
-
-    /**
-     * Handle proxy URL configuration change
-     */
-    private async handleProxyUrlChange(): Promise<void> {
-        const state = await this.commandContext.getProxyState();
-        const newUrl = vscode.workspace.getConfiguration('otakProxy').get<string>('proxyUrl', '');
-        const newPublicUrl = removeProxyCredentials(newUrl) || newUrl;
-        const newComparableUrl = getProxyPublicUrl(newUrl) || newUrl;
-        const currentPublicUrl = getProxyPublicUrl(state.manualProxyUrl) || state.manualProxyUrl || '';
-
-        if (newComparableUrl !== currentPublicUrl || (newUrl && hasProxyCredentials(newUrl))) {
-            state.manualProxyUrl = newUrl;
-            await this.commandContext.saveProxyState(state);
-
-            if (newUrl !== newPublicUrl) {
-                await vscode.workspace.getConfiguration('otakProxy').update(
-                    'proxyUrl',
-                    newPublicUrl,
-                    vscode.ConfigurationTarget.Global
-                );
-            }
-
-            if (state.mode === ProxyMode.Manual) {
-                await this.commandContext.applyProxySettings(newUrl, !!newUrl);
-                this.commandContext.updateStatusBar(state);
-            }
-        }
-    }
-
-    /**
-     * Handle polling interval change
-     */
-    private handlePollingIntervalChange(): void {
-        const newInterval = vscode.workspace
-            .getConfiguration('otakProxy')
-            .get<number>('pollingInterval', 30);
-        this.config.proxyMonitor.updateConfig({
-            pollingInterval: newInterval * 1000
-        });
-        Logger.info(`Polling interval updated to ${newInterval} seconds`);
-    }
-
-    /**
-     * Handle detection source priority change
-     */
-    private handleDetectionPriorityChange(): void {
-        const newPriority = vscode.workspace
-            .getConfiguration('otakProxy')
-            .get<string[]>('detectionSourcePriority', ['environment', 'vscode', 'platform']);
-        this.config.systemProxyDetector.updateDetectionPriority(newPriority);
-        this.config.proxyMonitor.updateConfig({
-            detectionSourcePriority: newPriority
-        });
-        Logger.info(`Detection source priority updated to: ${newPriority.join(', ')}`);
-    }
-
-    /**
-     * Handle max retries change
-     */
-    private handleMaxRetriesChange(): void {
-        const newMaxRetries = vscode.workspace
-            .getConfiguration('otakProxy')
-            .get<number>('maxRetries', 3);
-        this.config.proxyMonitor.updateConfig({
-            maxRetries: newMaxRetries
-        });
-        Logger.info(`Max retries updated to ${newMaxRetries}`);
-    }
-
-    /**
-     * Handle showProxyUrl configuration change
-     */
-    private async handleShowProxyUrlChange(): Promise<void> {
-        const state = await this.commandContext.getProxyState();
-        this.commandContext.updateStatusBar(state);
-    }
-
-    /**
-     * Handle proxy target configuration change (otakProxy.targets.*)
-     * Re-applies proxy so newly enabled targets get configured and
-     * newly disabled targets get unset.
-     */
-    private async handleTargetChange(): Promise<void> {
-        const state = await this.commandContext.getProxyState();
-        if (state.mode === ProxyMode.Off) {
-            this.commandContext.updateStatusBar(state);
-            return;
-        }
-        const activeUrl = this.commandContext.getActiveProxyUrl(state);
-        if (activeUrl) {
-            await this.commandContext.applyProxySettings(activeUrl, true);
-        }
-        this.commandContext.updateStatusBar(state);
     }
 
     /**

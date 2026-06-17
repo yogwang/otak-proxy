@@ -14,18 +14,11 @@ import { ProxyApplyOptions, ProxyConfigResults, ProxyConfigStatusReporter, Proxy
 import { updateProxyConfigTarget } from './ProxyConfigTargetRunner';
 import { saveProxyConfigResults } from './ProxyConfigStateTracker';
 import { buildProxyValidationSuggestions } from './ProxyValidationMessages';
-import {
-    showAggregatedErrors,
-    showProxyConfigured,
-    showProxyDisabled
-} from './ProxyApplierNotifications';
+import { showAggregatedErrors, showProxyConfigured, showProxyDisabled } from './ProxyApplierNotifications';
+import { getProxyTargets, partitionApplyTargets, partitionDisableTargets, silentUnsetTargets } from './ProxyTargetResolver';
 
-export interface ProxyTargets {
-    vscode: boolean;
-    git: boolean;
-    npm: boolean;
-    terminal: boolean;
-}
+export type { ProxyTargets } from './ProxyTargetResolver';
+export { getProxyTargets } from './ProxyTargetResolver';
 
 /**
  * ProxyApplier handles the application and removal of proxy settings
@@ -176,8 +169,8 @@ export class ProxyApplier {
             return false;
         }
 
-        const targets = ProxyApplier.getProxyTargets();
-        const { enabledTargets, disabledTargets } = this.partitionApplyTargets(targets);
+        const targets = getProxyTargets();
+        const { enabledTargets, disabledTargets } = partitionApplyTargets(this.getAllTargets(), targets);
 
         const results = await this.withOptionalProgress(
             options,
@@ -190,7 +183,7 @@ export class ProxyApplier {
             )
         );
 
-        await this.silentUnsetTargets(disabledTargets);
+        await silentUnsetTargets(disabledTargets);
 
         // Track configuration state if stateManager is provided
         await saveProxyConfigResults(this.stateManager, results, errorAggregator);
@@ -217,8 +210,8 @@ export class ProxyApplier {
             return false;
         }
 
-        const targets = ProxyApplier.getProxyTargets();
-        const { enabledTargets } = this.partitionDisableTargets(targets);
+        const targets = getProxyTargets();
+        const { enabledTargets } = partitionDisableTargets(this.getAllTargets(), targets);
 
         const results = await this.withOptionalProgress(
             options,
@@ -282,57 +275,6 @@ export class ProxyApplier {
         return results;
     }
 
-    /**
-     * Read which proxy targets are enabled from user configuration (otakProxy.targets.*).
-     * Disabled targets will be skipped during proxy apply/disable operations.
-     */
-    static getProxyTargets(): ProxyTargets {
-        const section = vscode.workspace.getConfiguration('otakProxy.targets');
-        return {
-            vscode: section.get<boolean>('vscode', true),
-            git: section.get<boolean>('git', true),
-            npm: section.get<boolean>('npm', true),
-            terminal: section.get<boolean>('terminal', true),
-        };
-    }
-
-    private partitionApplyTargets(targets: ProxyTargets): {
-        enabledTargets: ProxyConfigTarget[];
-        disabledTargets: ProxyConfigTarget[];
-    } {
-        const allTargets = this.getAllTargets();
-        const enabledTargets: ProxyConfigTarget[] = [];
-        const disabledTargets: ProxyConfigTarget[] = [];
-
-        for (const t of allTargets) {
-            if (this.isTargetEnabled(t.name, targets)) {
-                enabledTargets.push(t);
-            } else {
-                disabledTargets.push(t);
-            }
-        }
-
-        return { enabledTargets, disabledTargets };
-    }
-
-    private partitionDisableTargets(targets: ProxyTargets): {
-        enabledTargets: ProxyConfigTarget[];
-    } {
-        const allTargets = this.getAllTargets();
-        const enabledTargets = allTargets.filter(t => this.isTargetEnabled(t.name, targets));
-        return { enabledTargets };
-    }
-
-    private isTargetEnabled(name: string, targets: ProxyTargets): boolean {
-        switch (name) {
-            case 'VSCode configuration': return targets.vscode;
-            case 'Git configuration': return targets.git;
-            case 'npm configuration': return targets.npm;
-            case 'Terminal environment': return targets.terminal;
-            default: return true;
-        }
-    }
-
     private getAllTargets(): ProxyConfigTarget[] {
         const targets: ProxyConfigTarget[] = [
             { name: 'VSCode configuration', manager: this.vscodeManager },
@@ -345,15 +287,5 @@ export class ProxyApplier {
         }
 
         return targets;
-    }
-
-    private async silentUnsetTargets(targets: ProxyConfigTarget[]): Promise<void> {
-        for (const target of targets) {
-            try {
-                await target.manager.unsetProxy();
-            } catch (error) {
-                Logger.error(`Silent unset failed for ${target.name}:`, error);
-            }
-        }
     }
 }

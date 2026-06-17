@@ -17,10 +17,10 @@
   "config.showProxyUrl": "Hiển thị URL proxy trên thanh trạng thái",
   "config.syncEnabled": "Bật đồng bộ giữa nhiều phiên VSCode/Cursor. Khi bật, cài đặt proxy sẽ được chia sẻ giữa tất cả các phiên.",
   "config.syncInterval": "Chu kỳ kiểm tra đồng bộ (mili giây, 100-5000). Tần suất kiểm tra thay đổi từ các phiên khác.",
-  "config.targets.git": "Apply proxy to Git global configuration (http.proxy / https.proxy in ~/.gitconfig). Affects all git operations system-wide.",
-  "config.targets.npm": "Apply proxy to npm configuration (proxy / https-proxy in ~/.npmrc). Affects all npm operations system-wide.",
-  "config.targets.terminal": "Inject proxy environment variables (HTTP_PROXY, HTTPS_PROXY, etc.) into newly created integrated terminals.",
-  "config.targets.vscode": "Apply proxy to VSCode settings (http.proxy). Affects VSCode's own network requests and built-in extensions.",
+  "config.targets.git": "Áp dụng proxy cho cấu hình Git toàn cục (http.proxy / https.proxy trong ~/.gitconfig). Ảnh hưởng đến tất cả các thao tác git trên toàn hệ thống.",
+  "config.targets.npm": "Áp dụng proxy cho cấu hình npm (proxy / https-proxy trong ~/.npmrc). Ảnh hưởng đến tất cả các thao tác npm trên toàn hệ thống.",
+  "config.targets.terminal": "Đưa biến môi trường proxy (HTTP_PROXY, HTTPS_PROXY, v.v.) vào các terminal tích hợp mới tạo.",
+  "config.targets.vscode": "Áp dụng proxy cho cài đặt VSCode (http.proxy). Ảnh hưởng đến các yêu cầu mạng của VSCode và các tiện ích tích hợp.",
   "config.testInterval": "Khoảng thời gian kiểm tra kết nối proxy (giây, chỉ chế độ Tự động). Phạm vi: 30-600 giây. Mặc định: 60 giây.",
   "extension.description": "Quản lý proxy cho VS Code, Git, npm và terminal tích hợp chỉ với một thao tác."
 }

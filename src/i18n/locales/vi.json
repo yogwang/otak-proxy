@@ -20,6 +20,10 @@
   "config.enableFallback": "Bật dự phòng sang proxy thủ công khi không phát hiện được proxy hệ thống (chỉ chế độ Tự động). Khi bật, nếu không phát hiện proxy hệ thống, tiện ích sẽ thử dùng proxy thủ công đã cấu hình làm dự phòng.",
   "config.enableFallback.description": "Khi bật, nếu không phát hiện proxy hệ thống trong chế độ Auto, tiện ích sẽ thử dùng proxy thủ công đã cấu hình làm dự phòng.",
   "config.showProxyUrl": "Hiển thị URL proxy trên thanh trạng thái",
+  "config.targets.vscode": "Áp dụng proxy cho cài đặt VSCode (http.proxy). Ảnh hưởng đến các yêu cầu mạng của VSCode và các tiện ích tích hợp.",
+  "config.targets.git": "Áp dụng proxy cho cấu hình Git toàn cục (http.proxy / https.proxy trong ~/.gitconfig). Ảnh hưởng đến tất cả các thao tác git trên toàn hệ thống.",
+  "config.targets.npm": "Áp dụng proxy cho cấu hình npm (proxy / https-proxy trong ~/.npmrc). Ảnh hưởng đến tất cả các thao tác npm trên toàn hệ thống.",
+  "config.targets.terminal": "Đưa biến môi trường proxy (HTTP_PROXY, HTTPS_PROXY, v.v.) vào các terminal tích hợp mới tạo.",
   "config.syncEnabled": "Bật đồng bộ giữa nhiều phiên VSCode/Cursor. Khi bật, cài đặt proxy sẽ được chia sẻ giữa tất cả các phiên.",
   "config.syncInterval": "Chu kỳ kiểm tra đồng bộ (mili giây, 100-5000). Tần suất kiểm tra thay đổi từ các phiên khác.",
 

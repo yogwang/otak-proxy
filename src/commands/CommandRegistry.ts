@@ -218,6 +218,10 @@ export class CommandRegistry {
             if (e.affectsConfiguration('otakProxy.showProxyUrl')) {
                 await this.handleShowProxyUrlChange();
             }
+
+            if (e.affectsConfiguration('otakProxy.targets')) {
+                await this.handleTargetChange();
+            }
         });
         context.subscriptions.push(disposable);
     }
@@ -296,6 +300,24 @@ export class CommandRegistry {
      */
     private async handleShowProxyUrlChange(): Promise<void> {
         const state = await this.commandContext.getProxyState();
+        this.commandContext.updateStatusBar(state);
+    }
+
+    /**
+     * Handle proxy target configuration change (otakProxy.targets.*)
+     * Re-applies proxy so newly enabled targets get configured and
+     * newly disabled targets get unset.
+     */
+    private async handleTargetChange(): Promise<void> {
+        const state = await this.commandContext.getProxyState();
+        if (state.mode === ProxyMode.Off) {
+            this.commandContext.updateStatusBar(state);
+            return;
+        }
+        const activeUrl = this.commandContext.getActiveProxyUrl(state);
+        if (activeUrl) {
+            await this.commandContext.applyProxySettings(activeUrl, true);
+        }
         this.commandContext.updateStatusBar(state);
     }
 
